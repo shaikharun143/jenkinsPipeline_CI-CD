@@ -2,23 +2,38 @@ pipeline {
     agent any
 
     stages {
+
         stage('Preparation') {
             steps {
-                bat 'echo Preparing workspace...'
+                echo 'Preparing workspace...'
             }
         }
 
         stage('Build') {
             steps {
-                bat 'echo Build step - Static HTML, nothing to compile.'
+                echo 'Static HTML project - no build required'
             }
         }
 
         stage('Deploy') {
             steps {
-                bat 'echo Starting server on http://localhost:8081'
-                bat 'start /min cmd /c "python -m http.server 8081 --directory app"'
+                echo 'Starting local server on http://localhost:8081'
+
+                // Stops any previous server running on port 8081
+                bat 'for /f "tokens=5" %a in (\'netstat -aon ^| find ":8081"\') do taskkill /F /PID %a'
+
+                // Start server
+                bat 'start cmd /c "cd app && python -m http.server 8081"'
             }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline executed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed!'
         }
     }
 }
