@@ -149,3 +149,6 @@ curl http://localhost:5000
 ## Outcome
 You now have a working CI/CD pipeline: a single `git push` automatically builds a Docker
 image, runs the tests, and deploys the updated app with no manual steps.
+
+<img width="1358" height="608" alt="WhatsApp Image 2026-06-01 at 14 27 42" src="https://github.com/user-attachments/assets/073d9826-fe5d-40c4-a365-ae23e2c7cf80" />
+
