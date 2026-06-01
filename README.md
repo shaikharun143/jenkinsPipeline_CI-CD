@@ -45,6 +45,13 @@ which builds a Docker image, runs the tests, and redeploys the app as a running 
 These steps assume an Ubuntu machine (a local VM, a cloud instance, or WSL on Windows).
 On a cloud instance, open ports **8080** (Jenkins UI) and **5000** (the app) in the firewall.
 
+<img width="1368" height="576" alt="WhatsApp Image 2026-06-01 at 14 40 16" 
+src="https://github.com/user-attachments/assets/0591c75a-6424-4eee-8fe2-2b22cff5eb92" />
+
+<img width="1373" height="543" alt="WhatsApp Image 2026-06-01 at 14 33 14" src="https://github.com/user-attachments/assets/d9148e55-cec9-401e-ae0b-f7a4f1a57843" />
+
+
+
 ### 1. Update the machine
 ```bash
 sudo apt update && sudo apt upgrade -y
@@ -116,18 +123,16 @@ git push -u origin main
 ### 9. Configure the trigger (run on each commit)
 Pick one:
 
+
 **Option A — Poll SCM (simple, no public URL):**
 In the job config, under **Build Triggers**, tick **Poll SCM** and enter:
 ```
-H/5 * * * *
+H/1 * * * *
 ```
-Jenkins checks GitHub every 5 minutes and builds if there is a new commit.
+Jenkins checks GitHub every 1 minutes and builds if there is a new commit.
 
-**Option B — GitHub webhook (instant, needs a reachable Jenkins):**
-- In the job, tick **GitHub hook trigger for GITScm polling**.
-- In GitHub: **Settings -> Webhooks -> Add webhook**.
-- Payload URL: `http://<jenkins-ip>:8080/github-webhook/`
-- Content type: `application/json`
+
+
 
 ### 10. Run and test
 - Click **Build Now** for the first run.
@@ -151,4 +156,8 @@ You now have a working CI/CD pipeline: a single `git push` automatically builds 
 image, runs the tests, and deploys the updated app with no manual steps.
 
 <img width="1358" height="608" alt="WhatsApp Image 2026-06-01 at 14 27 42" src="https://github.com/user-attachments/assets/073d9826-fe5d-40c4-a365-ae23e2c7cf80" />
+
+<img width="1355" height="608" alt="WhatsApp Image 2026-06-01 at 14 28 18" src="https://github.com/user-attachments/assets/d92b1763-5199-4193-b034-b4bfb50bdb90" />
+
+<img width="1365" height="683" alt="WhatsApp Image 2026-06-01 at 14 36 46" src="https://github.com/user-attachments/assets/df8483ef-11e3-4fdf-9f10-a5976b4aea9f" />
 
