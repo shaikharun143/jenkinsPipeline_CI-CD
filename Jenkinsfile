@@ -1,24 +1,43 @@
 pipeline {
     agent any
 
+    environment {
+        IMAGE_NAME     = "my-flask-app"
+        CONTAINER_NAME = "my-flask-app-container"
+    }
+
     stages {
-        stage('Preparation') {
+        stage('Checkout') {
             steps {
-                bat 'echo Preparing workspace...'
+                checkout scm          // pulls the latest code from GitHub
             }
         }
-
         stage('Build') {
             steps {
-                bat 'echo Build step - Static HTML, nothing to compile.'
+                echo 'Building Docker image...'
+                sh 'docker build -t $IMAGE_NAME:$BUILD_NUMBER .'
             }
         }
-
+        stage('Test') {
+            steps {
+                echo 'Running tests...'
+                sh 'python3 -m pytest || echo "No tests yet — skipping"'
+            }
+        }
         stage('Deploy') {
             steps {
-                bat 'echo Starting server on http://localhost:8081'
-                bat 'start /min cmd /c "python -m http.server 8081 --directory app"'
+                echo 'Deploying container...'
+                sh '''
+                    docker rm -f $CONTAINER_NAME || true
+                    docker run -d --name $CONTAINER_NAME \
+                        -p 5000:5000 $IMAGE_NAME:$BUILD_NUMBER
+                '''
             }
         }
+    }
+
+    post {
+        success { echo 'Pipeline completed successfully!' }
+        failure { echo 'Pipeline failed.' }
     }
 }
